@@ -1,0 +1,178 @@
+<!DOCTYPE HTML><html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous">
+    <style>
+    html {font-family: Arial; display: inline-block; text-align: center;}
+    h2 {font-size: 1.0rem;}
+   
+    body {max-width: 600px; margin:0px auto; padding-bottom: 25px;}
+    .switch {position: relative; display: inline-block; width: 50px; height: 20px} 
+    .switch input {display: none}
+    .slider {position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 34px}
+    .slider:before {position: absolute; content: ""; height: 20px; width: 20px; left: 2px; bottom: 0px; background-color: #fff; -webkit-transition: .4s; transition: .4s; border-radius: 34px}
+    input:checked+.slider {background-color: #2196F3}
+    input:checked+.slider:before {-webkit-transform: translateX(52px); -ms-transform: translateX(52px); transform: translateX(27px)}
+        .btn {
+    background-color:rgba(0, 0, 0, 0);
+    border: 1px solid #00acc1;
+    box-sizing:border-box;
+    outline-color:#00acc1;
+    text-decoration:none;
+      color: #00acc1;
+      border-radius: 4px;
+      padding: 9px 16px;
+      background-image: none;
+      letter-spacing:1.0px;
+      cursor: pointer;
+      text-transform:uppercase;
+      font-size:14px;
+      line-height: 18px;
+      display: inline-block;
+      vertical-align: middle;
+     }
+    .btn:hover {
+   background-color:rgba(0, 172, 193, 0.04);
+    }
+    .btn:visited {
+      color: #00acc1;
+    }
+     .btn:active {
+   background-color:rgba(0, 172, 193, 0.09);
+    }
+    .contact_form ul {
+    width:750px;
+    list-style-type:none;
+    list-style-position:outside;
+    margin:0px;
+    padding:0px;
+}
+.contact_form li{
+    padding:12px;
+    border-bottom:1px solid #eee;
+    position:relative;
+}
+
+.contact_form label {
+    width:150px;
+    margin-top: 3px;
+    display:inline-block;
+    padding:3px;
+}
+.contact_form input {
+    height:20px;
+    width:220px;
+    padding:5px 8px;
+}
+.contact_form textarea {padding:8px; width:300px;}
+.contact_form button {margin-left:156px;}
+table {
+    border-collapse: separate;
+    border-spacing: 8px 8px;
+}
+input{
+  background-color: #12cd34;
+  color: #000;
+ 
+}
+  </style>
+  </head>
+  <body>
+    <title>Settings</title>
+    <h2 align="center">Weather</h2>
+    <h2 align="center">%name%</h2>
+    <table align="center">
+      <tr>
+        <td><form action="/get">
+            ApiKey:</td>
+          <td><input type="text" name="ApiKey"
+              placeholder="ApiKei" value=%apikey% size="32"></td>
+           </td
+        </tr>
+        <tr>
+         <td>
+            Latitude: </td>
+          <td><input type="text" color="b" name="Latitude"
+              placeholder="Latitude" value=%Latitude% size="32"></td>
+        </tr>
+        <tr>
+         <td>
+            Longitude:</td>
+          <td><input type="text" name="Longitude"
+              placeholder="Longitude" value=%Longitude% size="32"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td> <input type="submit" class="btn" value="Submit"> 
+          </td>
+          </form>   
+      </tr>
+        </table>
+
+        <div align="center">
+            <p><label> Volume</label>
+           <input type="range" class="btnSlider" onchange="updateSliderPWM(this)"id="pwmSlider"
+            min="0" max="21" value="%SLIDERVALUE%" step="1" class="slider">
+          <span id="textSliderValue">%SLIDERVALUE%</span></p>
+          </div>
+       <div align="center">
+          <h2 align="center">Reset password and SSID for new connection</h2>
+        <a class="btn" href="/reboot"
+          onclick="return confirm('Сбросить пароль?')">Reset</a>
+
+        <input type="button" class="btn" onclick="location.href='/';"
+          value="Main page">
+</div>
+      </div>
+    
+ <script>
+function updateSliderPWM(element) {
+  var sliderValue = document.getElementById("pwmSlider").value;
+  document.getElementById("textSliderValue").innerHTML = sliderValue;
+  console.log(sliderValue);
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "/slider?value="+sliderValue, true);
+  xhr.send();
+}
+
+function toggleCheckbox(element) {
+  var xhr = new XMLHttpRequest();
+  if(element.checked){ xhr.open("GET", "/rotation1", true); }
+  else { xhr.open("GET", "/rotation3", true); }
+  xhr.send();
+}
+
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var inputChecked;
+      var outputStateM;
+      if( this.responseText == 1){ 
+        inputChecked = true;
+        outputStateM = "On";
+      }
+      else { 
+        inputChecked = false;
+        outputStateM = "Off";
+      }
+      document.getElementById("output").checked = inputChecked;
+      document.getElementById("outputState").innerHTML = outputStateM;
+    }
+  };
+  xhttp.open("GET", "/state", true);
+  xhttp.send();
+}, 1000 ) ;
+
+/* sdfsdfsdfsdf */
+/* sdfsdf                           */
+
+
+
+</script>
+    </body>
+  </html>
